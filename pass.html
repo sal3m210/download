@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Password Generator</title>
+</head>
+<body>
+<h2>منشء كلمات سر , اظغط على الزر للانشاء</h2>
+
+<button onclick="generatePassword()">Generate Password</button>
+<button onclick="copyPassword()">Copy Password</button>
+<p id="result" style="font-weight:bold; font-size:20px;"></p>
+
+<script>
+let currentPassword = ""; // نخزن آخر كلمة سر تم توليدها
+
+function generatePassword() {
+    const length = 8;
+    const lower = "abcdefghijklmnopqrstuvwxyz";
+    const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const numbers = "0123456789";
+    const symbols = "!@#$%^&*()-_=+[]{};:,.<>?/|";
+    const all = lower + upper + numbers + symbols;
+
+    let password = "";
+
+    // نضمن وجود حرف من كل نوع
+    password += lower[Math.floor(Math.random() * lower.length)];
+    password += upper[Math.floor(Math.random() * upper.length)];
+    password += numbers[Math.floor(Math.random() * numbers.length)];
+    password += symbols[Math.floor(Math.random() * symbols.length)];
+
+    // باقي الخانات عشوائية
+    for (let i = 4; i < length; i++) {
+        password += all[Math.floor(Math.random() * all.length)];
+    }
+
+    // خلط الأحرف
+    password = password.split('').sort(() => 0.5 - Math.random()).join('');
+
+    currentPassword = password;
+    document.getElementById("result").textContent = password;
+}
+
+function copyPassword() {
+    if (!currentPassword) return alert("Generate a password first!");
+    navigator.clipboard.writeText(currentPassword)
+        .then(() => alert("Password copied to clipboard!"))
+        .catch(err => alert("Failed to copy: " + err));
+}
+</script>
+</body>
+</html>
